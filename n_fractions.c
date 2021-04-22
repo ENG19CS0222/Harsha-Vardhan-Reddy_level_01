@@ -1,1 +1,83 @@
 //WAP to find the sum of n fractions.
+
+#include<stdio.h>
+
+typedef struct
+{
+   int numerator;
+   int denominator;
+}fraction;
+
+int input_n()
+{
+   int n;
+   printf("Enter the number of fractions you wish to add:");
+   scanf("%d",&n);
+   return n;
+}
+
+fraction input_fractions()
+{
+    fraction f;
+    printf("Enter the numerator and denominator of fraction :");
+    scanf("%d%d",&f.numerator,&f.denominator);
+    return f;
+}
+
+void input_n_fractions(int n, fraction f[n])
+{
+    for(int i=0;i<n;i++)
+   {
+       f[i] = input_fractions();
+   }
+}
+
+fraction compute_fraction(int n,fraction f[n])
+{
+   int final_den=1,final_num=0,gcd;
+   for(int i=0;i<n;i++)
+   {
+     final_den *= f[i].denominator;
+   }
+   for(int i=0;i<n;i++)
+   {
+     final_num += (f[i].numerator) * (final_den/f[i].denominator);
+   }
+   fraction n_d={final_num,final_den};
+   gcd=find_gcd(n_d.numerator,n_d.denominator);
+   n_d.numerator=n_d.numerator/gcd;
+   n_d.denominator=n_d.denominator/gcd;
+   return n_d;
+}
+
+int find_gcd(int a, int b)
+{
+    while (a != b)
+    {
+        if (a > b)
+           a -= b;
+        else
+           b -= a;
+    }
+    return a;
+}
+
+void output(int n,fraction f[n], fraction n_d)
+{
+    for(int i=0;i<n-1;i++)
+    {
+       printf("%d/%d + ",f[i].numerator,f[i].denominator);
+    }
+   printf("%d/%d = %d/%d",f[n-1].numerator,f[n-1].denominator,n_d.numerator,n_d.denominator);
+}
+
+int main()
+{
+  int n;
+  n=input_n();
+  fraction f[n],n_d;
+  input_n_fractions(n,f);
+  n_d=compute_fraction(n,f);
+  output(n,f,n_d);
+  return 0;
+}
